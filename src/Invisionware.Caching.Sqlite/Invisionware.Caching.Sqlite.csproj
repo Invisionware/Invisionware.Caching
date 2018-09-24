@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Invisionware.Serialization" Version="1.1.16" />
+    <PackageReference Include="System.ComponentModel.Annotations" Version="4.5.0" />
+    <PackageReference Include="System.Data.SQLite" Version="1.0.109.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Invisionware.Caching\Invisionware.Caching.csproj" />
+  </ItemGroup>
+
+</Project>

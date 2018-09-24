@@ -7,9 +7,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Invisionware.Serialization" Version="1.1.16" />
     <PackageReference Include="nunit" Version="3.10.1" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.10.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.7.2" />
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Invisionware.Caching\Invisionware.Caching.csproj" />
+  </ItemGroup>
+
+  <Import Project="..\Invisionware.Caching.Tests.Shared\Invisionware.Caching.Tests.Shared.projitems" Label="Shared" />
 
 </Project>

@@ -9,5 +9,6 @@
     <Import_RootNamespace>Invisionware.Caching.Tests.Shared</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Mocks\MockByteSerializer.cs" />
   </ItemGroup>
 </Project>

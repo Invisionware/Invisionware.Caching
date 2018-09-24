@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Invisionware.Caching.ASPNET\Invisionware.Caching.ASPNET.csproj" />
+    <ProjectReference Include="..\..\src\Invisionware.Caching.Net\Invisionware.Caching.Net.csproj" />
     <ProjectReference Include="..\..\src\Invisionware.Caching\Invisionware.Caching.csproj" />
   </ItemGroup>
 

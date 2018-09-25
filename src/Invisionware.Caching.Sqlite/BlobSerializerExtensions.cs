@@ -21,7 +21,7 @@
 #region
 
 using System;
-using System.Data.SQLite;
+using SQLite.Net;
 using Invisionware.Serialization;
 
 #endregion

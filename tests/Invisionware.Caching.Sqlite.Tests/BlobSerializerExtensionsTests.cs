@@ -3,8 +3,7 @@ using NUnit.Framework;
 using Invisionware.Caching;
 using Invisionware.Serialization;
 using System.Linq;
-
-
+using Invisionware.Caching.SQLite;
 
 namespace Invisionware.Caching
 {

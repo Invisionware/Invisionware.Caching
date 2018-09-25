@@ -26,128 +26,104 @@ using System.Linq;
 using System.Threading.Tasks;
 using Invisionware.Serialization;
 using System.ComponentModel.DataAnnotations;
-using System.Data.SQLite;
+using SQLite.Net;
+using SQLite.Net.Interop;
 
 #endregion
 
 namespace Invisionware.Caching.SQLite
 {
 	/// <summary>
-	/// Implements <see cref="IAsyncCacheProvider" /> caching interface
-	/// using SQLite.Async.Pcl library.
+	/// Class SimpleCacheProvider.
 	/// </summary>
-	// ReSharper disable once InconsistentNaming
-	public class SQLiteSimpleCache : IAsyncCacheProvider
+	public class SimpleCacheProvider : IAsyncCacheProvider
 	{
 		/// <summary>
-		/// The serializer
+		/// The _cache
 		/// </summary>
-		private readonly IByteSerializer _serializer;
+		private readonly IDictionary<string, object> _cache = new Dictionary<string, object>();
 
 		/// <summary>
-		/// The asynchronous connection
+		/// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
 		/// </summary>
-		private readonly SQLiteConnection _asyncConnection;
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="SQLiteSimpleCache" /> class.
-		/// </summary>
-		/// <param name="connection">SQLite connection string.</param>
-		/// <param name="defaultSerializer">Byte serializer to use.</param>
-		public SQLiteSimpleCache(SQLiteConnection connection, IByteSerializer defaultSerializer)
+		public void Dispose()
 		{
-			CreateTable<SQliteCacheTable>();
-			_serializer = defaultSerializer;
-			_asyncConnection = connection;
 		}
 
-		#region ICacheProvider Members
-
-		/// <summary>
-		/// Removes the specified item from the cache.
-		/// </summary>
-		/// <param name="key">The identifier for the item to delete.</param>
-		/// <returns>True if the item was successfully removed from the cache; false otherwise.</returns>
-		public bool Remove(string key)
-		{
-			return Delete<SQliteCacheTable>(key) == 1;
-		}
-
-		/// <summary>
-		/// Removes the cache for all the keys provided.
-		/// </summary>
-		/// <param name="keys">The keys to remove.</param>
-		/// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-		public bool RemoveAll(IEnumerable<string> keys)
-		{
-			var enumerable = keys.Select(Remove).ToList();
-
-			return enumerable.All(x => x);
-		}
-
-		/// <summary>
-		/// Retrieves the specified item from the cache.
-		/// </summary>
-		/// <typeparam name="T">Type of item.</typeparam>
-		/// <param name="key">The identifier for the item to retrieve.</param>
-		/// <returns>The retrieved item, or <value>null</value> if the key was not found.</returns>
-		public T Get<T>(string key)
-		{
-			var entry = Find<SQliteCacheTable>(key);
-			if (entry != null)
-			{
-				if (entry.AbsoluteExpiration != null && DateTime.UtcNow > entry.AbsoluteExpiration)
-				{
-					Remove(key);
-					return default(T);
-				}
-				return GetObject<T>(entry);
-			}
-
-			return default(T);
-		}
+		#region ICacheProvider
 
 		#region Add
-
 		/// <summary>
 		/// Adds a new item into the cache at the specified cache key only if the cache is empty.
 		/// </summary>
 		/// <typeparam name="T">Type of item.</typeparam>
-		/// <param name="key">The key used to reference the item.</param>
-		/// <param name="value">The object to be inserted into the cache.</param>
+		/// <param name="key">Key for the item.</param>
+		/// <param name="value">Item to add.</param>
 		/// <returns>True if item was added, otherwise false.</returns>
-		/// <remarks>The item does not expire unless it is removed due memory pressure.</remarks>
 		public bool Add<T>(string key, T value)
 		{
-			return Insert(new SQliteCacheTable(key, GetBytes(value))) == 1;
+			return Set(key, value);
 		}
 
 		/// <summary>
 		/// Adds a new item into the cache at the specified cache key only if the cache is empty.
 		/// </summary>
 		/// <typeparam name="T">Type of item.</typeparam>
-		/// <param name="key">The key used to reference the item.</param>
-		/// <param name="value">The object to be inserted into the cache.</param>
-		/// <param name="expiresIn">Expiration timespan.</param>
-		/// <returns>True if item was added, otherwise false.</returns>
-		public bool Add<T>(string key, T value, TimeSpan expiresIn)
-		{
-			return Insert(new SQliteCacheTable(key, GetBytes(value), DateTime.Now + expiresIn)) == 1;
-		}
-
-		/// <summary>
-		/// Adds a new item into the cache at the specified cache key only if the cache is empty.
-		/// </summary>
-		/// <typeparam name="T">Type of item.</typeparam>
-		/// <param name="key">The key used to reference the item.</param>
-		/// <param name="value">The object to be inserted into the cache.</param>
+		/// <param name="key">Key for the item.</param>
+		/// <param name="value">Item to add.</param>
 		/// <param name="expiresAt">Expiration time.</param>
 		/// <returns>True if item was added, otherwise false.</returns>
+		/// <exception cref="System.NotImplementedException"></exception>
 		public bool Add<T>(string key, T value, DateTime expiresAt)
 		{
-			return Insert(new SQliteCacheTable(key, GetBytes(value), expiresAt)) == 1;
+			throw new NotImplementedException();
+		}
+
+		/// <summary>
+		/// Adds a new item into the cache at the specified cache key only if the cache is empty.
+		/// </summary>
+		/// <typeparam name="T">Type of item.</typeparam>
+		/// <param name="key">Key for the item.</param>
+		/// <param name="value">Item to add.</param>
+		/// <param name="expiresIn">Expiration timespan.</param>
+		/// <returns>True if item was added, otherwise false.</returns>
+		/// <exception cref="System.NotImplementedException"></exception>
+		public bool Add<T>(string key, T value, TimeSpan expiresIn)
+		{
+			throw new NotImplementedException();
 		}
 		#endregion Add
+
+		#region Get
+		/// <summary>
+		/// Retrieves the requested item from the cache.
+		/// </summary>
+		/// <typeparam name="T">Type of item.</typeparam>
+		/// <param name="key">The key.</param>
+		/// <returns>Requested cache item.</returns>
+		public T Get<T>(string key)
+		{
+			object value;
+
+			if (!_cache.TryGetValue(key, out value))
+				return default(T);
+
+			return (T)value;
+		}
+
+		/// <summary>
+		/// Gets all of the items in the cache related to the specified keys.
+		/// </summary>
+		/// <typeparam name="T">Type of item.</typeparam>
+		/// <param name="keys">The keys.</param>
+		/// <returns>A dictionary with thne requested items</returns>
+		public IDictionary<string, T> GetAll<T>(IEnumerable<string> keys)
+		{
+			if (keys == null) return null;
+
+			return _cache.Where(x => keys.Contains(x.Key)).ToDictionary(k => k.Key, v => (T)v.Value);
+		}
+		#endregion Get
 
 		#region Set
 		/// <summary>
@@ -156,23 +132,12 @@ namespace Invisionware.Caching.SQLite
 		/// <typeparam name="T">Type of item.</typeparam>
 		/// <param name="key">Key for the item.</param>
 		/// <param name="value">Item to set.</param>
-		/// <returns>True if item was added, otherwise false.</returns>
+		/// <returns>True if item was set, otherwise false.</returns>
 		public bool Set<T>(string key, T value)
 		{
-			return InsertOrReplace(new SQliteCacheTable(key, GetBytes(value))) == 1;
-		}
+			_cache[key] = value;
 
-		/// <summary>
-		/// Sets an item into the cache at the cache key specified regardless if it already exists or not.
-		/// </summary>
-		/// <typeparam name="T">Type of item.</typeparam>
-		/// <param name="key">Key for the item.</param>
-		/// <param name="value">Item to set.</param>
-		/// <param name="expiresIn">Expiration timespan.</param>
-		/// <returns>True if item was added, otherwise false.</returns>
-		public bool Set<T>(string key, T value, TimeSpan expiresIn)
-		{
-			return InsertOrReplace(new SQliteCacheTable(key, GetBytes(value), DateTime.Now + expiresIn)) == 1;
+			return true;
 		}
 
 		/// <summary>
@@ -182,10 +147,25 @@ namespace Invisionware.Caching.SQLite
 		/// <param name="key">Key for the item.</param>
 		/// <param name="value">Item to set.</param>
 		/// <param name="expiresAt">Expiration time.</param>
-		/// <returns>True if item was added, otherwise false.</returns>
+		/// <returns>True if item was set, otherwise false.</returns>
+		/// <exception cref="System.NotImplementedException"></exception>
 		public bool Set<T>(string key, T value, DateTime expiresAt)
 		{
-			return InsertOrReplace(new SQliteCacheTable(key, GetBytes(value), expiresAt)) == 1;
+			throw new NotImplementedException();
+		}
+
+		/// <summary>
+		/// Sets an item into the cache at the cache key specified regardless if it already exists or not.
+		/// </summary>
+		/// <typeparam name="T">Type of item.</typeparam>
+		/// <param name="key">Key for the item.</param>
+		/// <param name="value">Item to set.</param>
+		/// <param name="expiresIn">Expiration timespan.</param>
+		/// <returns>True if item was set, otherwise false.</returns>
+		/// <exception cref="System.NotImplementedException"></exception>
+		public bool Set<T>(string key, T value, TimeSpan expiresIn)
+		{
+			throw new NotImplementedException();
 		}
 		#endregion Set
 
@@ -199,20 +179,7 @@ namespace Invisionware.Caching.SQLite
 		/// <returns>True if the item exists, otherwise false.</returns>
 		public bool Replace<T>(string key, T value)
 		{
-			return Remove(key) && Add(key, value);
-		}
-
-		/// <summary>
-		/// Replaces the item at the cache.
-		/// </summary>
-		/// <typeparam name="T">Type of item.</typeparam>
-		/// <param name="key">Key for the item to replace.</param>
-		/// <param name="value">Item to replace with.</param>
-		/// <param name="expiresIn">Expiration timespan.</param>
-		/// <returns>True if the item exists, otherwise false.</returns>
-		public bool Replace<T>(string key, T value, TimeSpan expiresIn)
-		{
-			return Remove(key) && Add(key, value, expiresIn);
+			return Set(key, value);
 		}
 
 		/// <summary>
@@ -223,244 +190,177 @@ namespace Invisionware.Caching.SQLite
 		/// <param name="value">Item to replace with.</param>
 		/// <param name="expiresAt">Expiration time.</param>
 		/// <returns>True if the item exists, otherwise false.</returns>
+		/// <exception cref="System.NotImplementedException"></exception>
 		public bool Replace<T>(string key, T value, DateTime expiresAt)
 		{
-			return Remove(key) && Add(key, value, expiresAt);
+			throw new NotImplementedException();
+		}
+
+		/// <summary>
+		/// Replaces an item in the cache.
+		/// </summary>
+		/// <typeparam name="T">Type of item.</typeparam>
+		/// <param name="key">Key for the item to replace.</param>
+		/// <param name="value">Item to replace with.</param>
+		/// <param name="expiresIn">Expiration timespan.</param>
+		/// <returns>True if item was replaced, otherwise false.</returns>
+		/// <exception cref="System.NotImplementedException"></exception>
+		public bool Replace<T>(string key, T value, TimeSpan expiresIn)
+		{
+			throw new NotImplementedException();
 		}
 		#endregion Replace
 
+		#region Remove
 		/// <summary>
-		/// Invalidates all data on the cache.
+		/// Removes the requested item from the cache.
+		/// </summary>
+		/// <param name="key">The key.</param>
+		/// <returns>Retrurns true on success</returns>
+		public bool Remove(string key)
+		{
+			if (_cache.ContainsKey(key))
+			{
+				return _cache.Remove(key);
+			}
+
+			return false;
+		}
+
+		/// <summary>
+		/// Removes all items in the cache with the specified keys.
+		/// </summary>
+		/// <param name="keys">The keys.</param>
+		/// <returns>Retrurns true on success</returns>
+		public bool RemoveAll(IEnumerable<string> keys)
+		{
+			if (keys == null) return false;
+
+			var enumerable = keys.Select(Remove);
+
+			return true;
+		}
+		#endregion Remove
+
+		/// <summary>
+		/// Flushes the entire cache (and clears it).
 		/// </summary>
 		/// <returns>Retrurns true on success</returns>
-		public virtual bool FlushAll()
+		/// <exception cref="System.NotImplementedException"></exception>
+		public bool FlushAll()
 		{
-			DeleteAll<SQliteCacheTable>();
-
-			return true;
+			throw new NotImplementedException();
 		}
+		#endregion ICacheProvider
 
-		/// <summary>
-		/// Retrieves multiple items from the cache.
-		/// The default value of T is set for all keys that do not exist.
-		/// </summary>
-		/// <typeparam name="T">Type of values to get.</typeparam>
-		/// <param name="keys">The list of identifiers for the items to retrieve.</param>
-		/// <returns>a Dictionary holding all items indexed by their key.</returns>
-		public IDictionary<string, T> GetAll<T>(IEnumerable<string> keys)
-		{
-			return keys.Select(a => new { Key = a, Item = Get<T>(a) }).Where(a => a.Item != null).ToDictionary(item => item.Key, item => item.Item);
-		}
-
-		/// <summary>
-		/// Sets multiple items to the cache.
-		/// </summary>
-		/// <typeparam name="T">Type of values to set.</typeparam>
-		/// <param name="values">The values.</param>
-		public void SetAll<T>(IDictionary<string, T> values)
-		{
-			var enumerable = values.Select(pair => Set(pair.Key, pair.Value)).ToList();
-		}
-
-		#endregion
-
-		/// <summary>
-		/// Gets the object from the table.
-		/// </summary>
-		/// <typeparam name="T">Type of object.</typeparam>
-		/// <param name="item">Table item.</param>
-		/// <returns>Object T if item found, otherwise default{T}.</returns>
-		protected virtual T GetObject<T>(SQliteCacheTable item)
-		{
-			return (item != null) ? _serializer.Deserialize<T>(item.Blob) : default(T);
-		}
-
-		/// <summary>
-		/// Gets bytes from the object.
-		/// </summary>
-		/// <typeparam name="T">Type of object.</typeparam>
-		/// <param name="obj">Object to turn into bytes.</param>
-		/// <returns>Byte array.</returns>
-		protected virtual byte[] GetBytes<T>(T obj)
-		{
-			return _serializer.SerializeToBytes(obj);
-		}
-
-		/// <summary>
-		/// Class SQliteCacheTable.
-		/// </summary>
-		protected class SQliteCacheTable
-		{
-			/// <summary>
-			/// Initializes a new instance of the <see cref="SQliteCacheTable" /> class.
-			/// </summary>
-			public SQliteCacheTable()
-			{
-			}
-
-			/// <summary>
-			/// Initializes a new instance of the <see cref="SQliteCacheTable" /> class.
-			/// </summary>
-			/// <param name="key">The key.</param>
-			/// <param name="blob">The BLOB.</param>
-			/// <param name="absoluteExpiration">The absolute expiration.</param>
-			public SQliteCacheTable(string key, byte[] blob, DateTime? absoluteExpiration = null)
-			{
-				Key = key;
-				Blob = blob;
-				AbsoluteExpiration = absoluteExpiration?.ToUniversalTime();
-			}
-
-			/// <summary>
-			/// Gets or sets the key.
-			/// </summary>
-			/// <value>The key.</value>
-			[Key]
-			public string Key { get; set; }
-			/// <summary>
-			/// Gets or sets the BLOB.
-			/// </summary>
-			/// <value>The BLOB.</value>
-			public byte[] Blob { get; set; }
-			/// <summary>
-			/// Gets or sets the absolute expiration.
-			/// </summary>
-			/// <value>The absolute expiration.</value>
-			public DateTime? AbsoluteExpiration { get; set; }
-		}
-
-		#region IAsyncSimpleCache Members
-
-		/// <summary>
-		/// Removes the specified item from the cache.
-		/// </summary>
-		/// <param name="key">The identifier for the item to delete.</param>
-		/// <returns>True if the item was successfully removed from the cache; false otherwise.</returns>
-		public async Task<bool> RemoveAsync(string key)
-		{
-			return await _asyncConnection.DeleteAsync<SQliteCacheTable>(key) == 1;
-		}
-
-		/// <summary>
-		/// Removes the cache for all the keys provided.
-		/// </summary>
-		/// <param name="keys">The keys to remove.</param>
-		/// <returns>Task.</returns>
-		public async Task<bool> RemoveAllAsync(IEnumerable<string> keys)
-		{
-			await Task.WhenAll(keys.Select(RemoveAsync));
-
-			return true;
-		}
-
-		/// <summary>
-		/// Retrieves the specified item from the cache.
-		/// </summary>
-		/// <typeparam name="T">Type of item.</typeparam>
-		/// <param name="key">The identifier for the item to retrieve.</param>
-		/// <returns>The retrieved item, or <value>null</value> if the key was not found.</returns>
-		public async Task<T> GetAsync<T>(string key)
-		{
-			var entry = await _asyncConnection.FindAsync<SQliteCacheTable>(key);
-			if (entry != null)
-			{
-				if (entry.AbsoluteExpiration != null && DateTime.UtcNow > entry.AbsoluteExpiration)
-				{
-					Remove(key);
-					return default(T);
-				}
-				return GetObject<T>(entry);
-			}
-
-			return default(T);
-		}
-
+		#region IAsyncCacheProvider
 		#region Add
 		/// <summary>
-		/// Adds a new item into the cache at the specified cache key only if the cache is empty.
+		/// add as an asynchronous operation.
 		/// </summary>
 		/// <typeparam name="T">Type of item.</typeparam>
-		/// <param name="key">The key used to reference the item.</param>
-		/// <param name="value">The object to be inserted into the cache.</param>
+		/// <param name="key">Key for the item.</param>
+		/// <param name="value">Item to add.</param>
 		/// <returns>True if item was added, otherwise false.</returns>
-		/// <remarks>The item does not expire unless it is removed due memory pressure.</remarks>
 		public async Task<bool> AddAsync<T>(string key, T value)
 		{
-			return await _asyncConnection.InsertAsync(new SQliteCacheTable(key, GetBytes(value))) == 1;
+			return await Task.Factory.StartNew(() => Add(key, value));
 		}
 
 		/// <summary>
-		/// Adds a new item into the cache at the specified cache key only if the cache is empty.
+		/// add as an asynchronous operation.
 		/// </summary>
 		/// <typeparam name="T">Type of item.</typeparam>
-		/// <param name="key">The key used to reference the item.</param>
-		/// <param name="value">The object to be inserted into the cache.</param>
-		/// <param name="expiresIn">Expiration timespan.</param>
-		/// <returns>True if item was added, otherwise false.</returns>
-		/// <remarks>The item does not expire unless it is removed due memory pressure.</remarks>
-		public async Task<bool> AddAsync<T>(string key, T value, TimeSpan expiresIn)
-		{
-			return await _asyncConnection.InsertAsync(new SQliteCacheTable(key, GetBytes(value), DateTime.Now + expiresIn)) == 1;
-		}
-
-		/// <summary>
-		/// Adds a new item into the cache at the specified cache key only if the cache is empty.
-		/// </summary>
-		/// <typeparam name="T">Type of item.</typeparam>
-		/// <param name="key">The key used to reference the item.</param>
-		/// <param name="value">The object to be inserted into the cache.</param>
+		/// <param name="key">Key for the item.</param>
+		/// <param name="value">Item to add.</param>
 		/// <param name="expiresAt">Expiration time.</param>
 		/// <returns>True if item was added, otherwise false.</returns>
-		/// <remarks>The item does not expire unless it is removed due memory pressure.</remarks>
 		public async Task<bool> AddAsync<T>(string key, T value, DateTime expiresAt)
 		{
-			return await _asyncConnection.InsertAsync(new SQliteCacheTable(key, GetBytes(value), expiresAt)) == 1;
+			return await Task.Factory.StartNew(() => Add(key, value, expiresAt));
+		}
+
+		/// <summary>
+		/// add as an asynchronous operation.
+		/// </summary>
+		/// <typeparam name="T">Type of item.</typeparam>
+		/// <param name="key">Key for the item.</param>
+		/// <param name="value">Item to add.</param>
+		/// <param name="expiresIn">Expiration timespan.</param>
+		/// <returns>True if item was added, otherwise false.</returns>
+		public async Task<bool> AddAsync<T>(string key, T value, TimeSpan expiresIn)
+		{
+			return await Task.Factory.StartNew(() => Add(key, value, expiresIn));
 		}
 		#endregion Add
 
+		#region Get
+		/// <summary>
+		/// get as an asynchronous operation.
+		/// </summary>
+		/// <typeparam name="T">Type of item.</typeparam>
+		/// <param name="key">The key.</param>
+		/// <returns>Requested cache item.</returns>
+		public async Task<T> GetAsync<T>(string key)
+		{
+			return await Task.Factory.StartNew(() => Get<T>(key));
+		}
+
+		/// <summary>
+		/// get all as an asynchronous operation.
+		/// </summary>
+		/// <typeparam name="T">Type of item.</typeparam>
+		/// <param name="keys">The keys.</param>
+		/// <returns>A dictionary with thne requested items</returns>
+		public async Task<IDictionary<string, T>> GetAllAsync<T>(IEnumerable<string> keys)
+		{
+			return await Task.Factory.StartNew(() => GetAll<T>(keys));
+		}
+		#endregion Get
+
 		#region Set
 		/// <summary>
-		/// Sets an item into the cache at the cache key specified regardless if it already exists or not.
+		/// set as an asynchronous operation.
 		/// </summary>
 		/// <typeparam name="T">Type of item.</typeparam>
 		/// <param name="key">Key for the item.</param>
 		/// <param name="value">Item to set.</param>
-		/// <returns>True if item was added, otherwise false.</returns>
+		/// <returns>True if item was set, otherwise false.</returns>
 		public async Task<bool> SetAsync<T>(string key, T value)
 		{
-			return await _asyncConnection.InsertOrReplaceAsync(new SQliteCacheTable(key, GetBytes(value))) == 1;
+			return await Task.Factory.StartNew(() => Set(key, value));
 		}
 
 		/// <summary>
-		/// Sets an item into the cache at the cache key specified regardless if it already exists or not.
-		/// </summary>
-		/// <typeparam name="T">Type of item.</typeparam>
-		/// <param name="key">Key for the item.</param>
-		/// <param name="value">Item to set.</param>
-		/// <param name="expiresIn">Expiration timespan.</param>
-		/// <returns>True if item was added, otherwise false.</returns>
-		public async Task<bool> SetAsync<T>(string key, T value, TimeSpan expiresIn)
-		{
-			return await _asyncConnection.InsertOrReplaceAsync(new SQliteCacheTable(key, GetBytes(value), DateTime.Now + expiresIn)) == 1;
-		}
-
-		/// <summary>
-		/// Sets an item into the cache at the cache key specified regardless if it already exists or not.
+		/// set as an asynchronous operation.
 		/// </summary>
 		/// <typeparam name="T">Type of item.</typeparam>
 		/// <param name="key">Key for the item.</param>
 		/// <param name="value">Item to set.</param>
 		/// <param name="expiresAt">Expiration time.</param>
-		/// <returns>True if item was added, otherwise false.</returns>
+		/// <returns>True if item was set, otherwise false.</returns>
 		public async Task<bool> SetAsync<T>(string key, T value, DateTime expiresAt)
 		{
-			return await _asyncConnection.InsertOrReplaceAsync(new SQliteCacheTable(key, GetBytes(value), expiresAt)) == 1;
+			return await Task.Factory.StartNew(() => Set(key, value, expiresAt));
+		}
+
+		/// <summary>
+		/// set as an asynchronous operation.
+		/// </summary>
+		/// <typeparam name="T">Type of item.</typeparam>
+		/// <param name="key">Key for the item.</param>
+		/// <param name="value">Item to set.</param>
+		/// <param name="expiresIn">Expiration timespan.</param>
+		/// <returns>True if item was set, otherwise false.</returns>
+		public async Task<bool> SetAsync<T>(string key, T value, TimeSpan expiresIn)
+		{
+			return await Task.Factory.StartNew(() => Set(key, value, expiresIn));
 		}
 		#endregion Set
 
 		#region Replace
 		/// <summary>
-		/// Replaces the item at the cache.
+		/// replace as an asynchronous operation.
 		/// </summary>
 		/// <typeparam name="T">Type of item.</typeparam>
 		/// <param name="key">Key for the item to replace.</param>
@@ -468,24 +368,11 @@ namespace Invisionware.Caching.SQLite
 		/// <returns>True if the item exists, otherwise false.</returns>
 		public async Task<bool> ReplaceAsync<T>(string key, T value)
 		{
-			return await RemoveAsync(key) && await AddAsync(key, value);
+			return await Task.Factory.StartNew(() => Replace(key, value));
 		}
 
 		/// <summary>
-		/// Replaces the item at the cache.
-		/// </summary>
-		/// <typeparam name="T">Type of item.</typeparam>
-		/// <param name="key">Key for the item to replace.</param>
-		/// <param name="value">Item to replace with.</param>
-		/// <param name="expiresIn">Expiration timespan.</param>
-		/// <returns>True if the item exists, otherwise false.</returns>
-		public async Task<bool> ReplaceAsync<T>(string key, T value, TimeSpan expiresIn)
-		{
-			return await RemoveAsync(key) && await AddAsync(key, value, expiresIn);
-		}
-
-		/// <summary>
-		/// Replaces the item at the cache.
+		/// replace as an asynchronous operation.
 		/// </summary>
 		/// <typeparam name="T">Type of item.</typeparam>
 		/// <param name="key">Key for the item to replace.</param>
@@ -494,87 +381,53 @@ namespace Invisionware.Caching.SQLite
 		/// <returns>True if the item exists, otherwise false.</returns>
 		public async Task<bool> ReplaceAsync<T>(string key, T value, DateTime expiresAt)
 		{
-			return await RemoveAsync(key) && await AddAsync(key, value, expiresAt);
+			return await Task.Factory.StartNew(() => Replace(key, value, expiresAt));
 		}
-		#endregion Replace 
 
 		/// <summary>
-		/// Invalidates all data on the cache.
+		/// replace as an asynchronous operation.
 		/// </summary>
-		/// <returns>Task.</returns>
+		/// <typeparam name="T">Type of item.</typeparam>
+		/// <param name="key">Key for the item to replace.</param>
+		/// <param name="value">Item to replace with.</param>
+		/// <param name="expiresIn">Expiration timespan.</param>
+		/// <returns>True if item was replaced, otherwise false.</returns>
+		public async Task<bool> ReplaceAsync<T>(string key, T value, TimeSpan expiresIn)
+		{
+			return await Task.Factory.StartNew(() => Replace(key, value, expiresIn));
+		}
+		#endregion Replace
+
+		#region Remove
+		/// <summary>
+		/// remove as an asynchronous operation.
+		/// </summary>
+		/// <param name="key">The key.</param>
+		/// <returns>Task&lt;System.Boolean&gt;.</returns>
+		public async Task<bool> RemoveAsync(string key)
+		{
+			return await Task.Factory.StartNew(() => Remove(key));
+		}
+
+		/// <summary>
+		/// remove all as an asynchronous operation.
+		/// </summary>
+		/// <param name="keys">The keys.</param>
+		/// <returns>Task&lt;System.Boolean&gt;.</returns>
+		public async Task<bool> RemoveAllAsync(IEnumerable<string> keys)
+		{
+			return await Task.Factory.StartNew(() => RemoveAll(keys));
+		}
+		#endregion Remove
+
+		/// <summary>
+		/// flush all as an asynchronous operation.
+		/// </summary>
+		/// <returns>Retrurns true on success</returns>
 		public async Task<bool> FlushAllAsync()
 		{
-			await _asyncConnection.DeleteAllAsync<SQliteCacheTable>();
-
-			return true;
+			return await Task.Factory.StartNew(FlushAll);
 		}
-
-		/// <summary>
-		/// Retrieves multiple items from the cache.
-		/// The default value of T is set for all keys that do not exist.
-		/// </summary>
-		/// <typeparam name="T">Type of values to get.</typeparam>
-		/// <param name="keys">The list of identifiers for the items to retrieve.</param>
-		/// <returns>a Dictionary holding all items indexed by their key.</returns>
-		public async Task<IDictionary<string, T>> GetAllAsync<T>(IEnumerable<string> keys)
-		{
-			var dict = new Dictionary<string, T>();
-
-			// ReSharper disable once LoopCanBeConvertedToQuery
-			foreach (var item in keys.Select(a => new { Key = a, Item = GetAsync<T>(a) }).Where(a => a.Item != null))
-			{
-				dict.Add(item.Key, await item.Item);
-			}
-
-			return dict;
-		}
-
-		/// <summary>
-		/// Sets multiple items to the cache.
-		/// </summary>
-		/// <typeparam name="T">Type of values to set.</typeparam>
-		/// <param name="values">The values.</param>
-		/// <returns>Task.</returns>
-		public Task SetAllAsync<T>(IDictionary<string, T> values)
-		{
-			return Task.WhenAll(values.Select(value => SetAsync(value.Key, value.Value)));
-		}
-
-		#region IDisposable Support
-		private bool disposedValue = false; // To detect redundant calls
-
-		protected virtual void Dispose(bool disposing)
-		{
-			if (!disposedValue)
-			{
-				if (disposing)
-				{
-					// TODO: dispose managed state (managed objects).
-				}
-
-				// TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
-				// TODO: set large fields to null.
-
-				disposedValue = true;
-			}
-		}
-
-		// TODO: override a finalizer only if Dispose(bool disposing) above has code to free unmanaged resources.
-		// ~SQLiteSimpleCache() {
-		//   // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-		//   Dispose(false);
-		// }
-
-		// This code added to correctly implement the disposable pattern.
-		public void Dispose()
-		{
-			// Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-			Dispose(true);
-			// TODO: uncomment the following line if the finalizer is overridden above.
-			// GC.SuppressFinalize(this);
-		}
-		#endregion
-
-		#endregion
+		#endregion IAsyncCacheProvider
 	}
 }

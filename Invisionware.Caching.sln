@@ -21,7 +21,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nusepc", ".nusepc", "{6C24802F-2451-4148-BDE5-13AC13D87AFB}"
 	ProjectSection(SolutionItems) = preProject
 		nuspec\Invisionware.Caching.ASPNET.nuspec = nuspec\Invisionware.Caching.ASPNET.nuspec
-		nuspec\Invisionware.Caching.Net.nuspec = nuspec\Invisionware.Caching.Net.nuspec
+		nuspec\Invisionware.Caching.NetStandard.nuspec = nuspec\Invisionware.Caching.NetStandard.nuspec
 		nuspec\Invisionware.Caching.nuspec = nuspec\Invisionware.Caching.nuspec
 		nuspec\Invisionware.Caching.SQLite.nuspec = nuspec\Invisionware.Caching.SQLite.nuspec
 	EndProjectSection

@@ -6,9 +6,9 @@
 		<title>Invisionware - Caching - Sqlite</title>
 		<authors>Invisionware</authors>
 		<owners>Invisionware</owners>
-		<projectUrl>https://github.com/Invisionware/Caching</projectUrl>
-		<licenseUrl>https://raw.githubusercontent.com/Invisionware/Caching/master/LICENSE</licenseUrl>
-		<iconUrl>https://github.com/Invisionware/Caching/raw/master/logo.png</iconUrl>
+		<projectUrl>https://github.com/Invisionware/Invisionware.Caching</projectUrl>
+		<licenseUrl>https://raw.githubusercontent.com/Invisionware/Invisionware.Caching/master/LICENSE</licenseUrl>
+		<iconUrl>https://github.com/Invisionware/Invisionware.Caching/raw/master/logo.png</iconUrl>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
 		<description>This package implements the caching provider via SQLite</description>
 		<summary>Invisionware is a open source project that aims to provide a powerfull and cross platform set of tools and extension libraries.</summary>

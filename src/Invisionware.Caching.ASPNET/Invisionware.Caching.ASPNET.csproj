@@ -13,6 +13,11 @@
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 	</PropertyGroup>
 	<ItemGroup>
+	  <PackageReference Include="Invisionware.IoC" Version="1.0.1" />
+	  <PackageReference Include="Invisionware.Serialization" Version="1.1.17" />
+	  <PackageReference Include="Microsoft.AspNetCore.Session" Version="2.1.1" />
+	</ItemGroup>
+	<ItemGroup>
 		<ProjectReference Include="..\Invisionware.Caching\Invisionware.Caching.csproj" />
 	</ItemGroup>
 </Project>

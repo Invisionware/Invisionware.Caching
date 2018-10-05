@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
 	<metadata>
-		<id>Invisionware.Caching.NetStandard</id>
+		<id>Invisionware.Caching.SystemRuntime</id>
 		<version>1.0.0</version>
-		<title>Invisionware - Caching - NET</title>
+		<title>Invisionware - Caching - SystemRuntime</title>
 		<authors>Invisionware</authors>
 		<owners>Invisionware</owners>
 		<projectUrl>https://github.com/Invisionware/Invisionware.Caching</projectUrl>
@@ -22,7 +22,7 @@
 	</metadata>
 	<files>
 		<!-- Assemblies: .NET Standard 2.0 -->
-		<file src="..\src\Invisionware.Caching.Net\bin\$configuration$\netstandard2.0\Invisionware.Caching.Net.dll" target="lib\netstandard2.0" />
-		<file src="..\src\Invisionware.Caching.Net\bin\$configuration$\netstandard2.0\Invisionware.Caching.Net.pdb" target="lib\netstandard2.0" />
+		<file src="..\src\Invisionware.Caching.SystemRuntime\bin\$configuration$\netstandard2.0\Invisionware.Caching.SystemRuntime.dll" target="lib\netstandard2.0" />
+		<file src="..\src\Invisionware.Caching.SystemRuntime\bin\$configuration$\netstandard2.0\Invisionware.Caching.SystemRuntime.pdb" target="lib\netstandard2.0" />
 	</files>
 </package>

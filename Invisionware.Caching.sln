@@ -3,14 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{E26DED83-B3C8-4189-AC73-7276B43083C2}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Invisionware.Caching", "src\Invisionware.Caching\Invisionware.Caching.csproj", "{68A5ED93-9EF8-4F07-8ABD-015D84653601}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Invisionware.Caching.ASPNET", "src\Invisionware.Caching.ASPNET\Invisionware.Caching.ASPNET.csproj", "{EE18506B-1619-4865-8F6B-F2D210AF57FF}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Invisionware.Caching.Sqlite", "src\Invisionware.Caching.Sqlite\Invisionware.Caching.Sqlite.csproj", "{F7F6F4D1-BF69-4869-9801-C71A2593AE0E}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".misc", ".misc", "{EF19AFF3-7C06-4CB3-B37D-815ABB3BF375}"
 	ProjectSection(SolutionItems) = preProject
 		build.settings.json = build.settings.json
@@ -26,6 +18,16 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nusepc", ".nusepc", "{6C24
 		nuspec\Invisionware.Caching.SQLite.nuspec = nuspec\Invisionware.Caching.SQLite.nuspec
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{E26DED83-B3C8-4189-AC73-7276B43083C2}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Invisionware.Caching", "src\Invisionware.Caching\Invisionware.Caching.csproj", "{68A5ED93-9EF8-4F07-8ABD-015D84653601}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Invisionware.Caching.ASPNET", "src\Invisionware.Caching.ASPNET\Invisionware.Caching.ASPNET.csproj", "{EE18506B-1619-4865-8F6B-F2D210AF57FF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Invisionware.Caching.Sqlite", "src\Invisionware.Caching.Sqlite\Invisionware.Caching.Sqlite.csproj", "{F7F6F4D1-BF69-4869-9801-C71A2593AE0E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Invisionware.Caching.SystemRuntime", "src\Invisionware.Caching.SystemRuntime\Invisionware.Caching.SystemRuntime.csproj", "{518DD45A-7E27-4453-BDCD-7141F33E388E}"
+EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{EAA37644-955A-4688-9A1F-746A03E495CD}"
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Invisionware.Caching.Tests.Shared", "tests\Invisionware.Caching.Tests.Shared\Invisionware.Caching.Tests.Shared.shproj", "{3EE7AE55-BB7B-48ED-A18D-84669BC51EB1}"
@@ -36,9 +38,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Invisionware.Caching.Sqlite
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Invisionware.Caching.Tests", "tests\Invisionware.Caching.Tests\Invisionware.Caching.Tests.csproj", "{63F5786B-15FE-48AF-90A1-CB7040B5224C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Invisionware.Caching.Net", "src\Invisionware.Caching.Net\Invisionware.Caching.Net.csproj", "{518DD45A-7E27-4453-BDCD-7141F33E388E}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Invisionware.Caching.NET.Tests", "tests\Invisionware.Caching.NET.Tests\Invisionware.Caching.NET.Tests.csproj", "{4E3C625C-32B6-47D7-B49B-C7BB2B465FBC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Invisionware.Caching.SystemRuntime.Tests", "tests\Invisionware.Caching.SystemRuntime.Tests\Invisionware.Caching.SystemRuntime.Tests.csproj", "{4E3C625C-32B6-47D7-B49B-C7BB2B465FBC}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution

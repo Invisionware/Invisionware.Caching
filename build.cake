@@ -376,18 +376,33 @@ Task("Nuget-Publish")
 				ConfigFile = settings.NuGet.NuGetConfig,
 				Verbosity = NuGetVerbosity.Normal
 			};
-	
+
+	var dotnetCorePushSettings = new DotNetCoreNuGetPushSettings  {
+				Source = settings.NuGet.FeedUrl,
+				ApiKey =  settings.NuGet.FeedApiKey
+			};
+
 	foreach (var n in nupkgFiles)
 	{
 		try
 		{		
-			NuGetPush(n, nugetSettings);
+			switch (settings.NuGet.PublishType)
+			{
+				case "dotnetcore":
+				     DotNetCoreNuGetPush(n.ToString(), dotnetCorePushSettings);			
+
+					break;
+				default: 
+					NuGetPush(n, nugetSettings);
+					
+					break;
+			}			
 		}
 		catch (Exception ex)
 		{
 			Information("\tFailed to published: ", ex.Message);
 			
-			if (ex.Message.Contains("403")) { authError = true; }
+			if (ex.Message.Contains("403") || ex.Message.Contains("401")) { authError = true; }
 		}
 	}
 	

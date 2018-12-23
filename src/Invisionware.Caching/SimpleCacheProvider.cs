@@ -99,12 +99,11 @@ namespace Invisionware.Caching
 		/// <returns>Requested cache item.</returns>
 		public T Get<T>(string key)
 		{
-			object value;
 
-			if (!_cache.TryGetValue(key, out value))
-				return default(T);
+            if (!_cache.TryGetValue(key, out object value))
+                return default(T);
 
-			return (T) value;
+            return (T) value;
 		}
 
 		/// <summary>

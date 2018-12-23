@@ -56,16 +56,16 @@ namespace Invisionware.Caching.ASPNET
 			return true;
 		}
 
-		public async Task<bool> FlushAllAsync()
+		public Task<bool> FlushAllAsync()
 		{
 			//await _session.CommitAsync();
 
-			return true;
+			return Task.FromResult(true);
 		}
 
 		public T Get<T>(string key)
 		{
-			byte[] value;
+			//byte[] value;
 
 			//if (_session.TryGetValue(key, out value))
 			//{

@@ -11,13 +11,11 @@ namespace Invisionware.Caching.ASPNET
 {
 	public class HttpSessionCache : IAsyncCacheProvider
 	{
-		private ISession _session;
+		private readonly ISession _session;
 
 		public HttpSessionCache(ISession session)
 		{
-			if (session == null) throw new ArgumentNullException(nameof(session));
-
-			_session = session;
+            _session = session ?? throw new ArgumentNullException(nameof(session));
 		}
 
 		public bool Add<T>(string key, T value)
@@ -70,18 +68,17 @@ namespace Invisionware.Caching.ASPNET
 
 		public T Get<T>(string key)
 		{
-			byte[] value;
 
-			if (_session.TryGetValue(key, out value))
-			{
-				var serializer = Resolver.Resolve<ISerializer>();
+            if (_session.TryGetValue(key, out byte[] value))
+            {
+                var serializer = Resolver.Resolve<ISerializer>();
 
-				var obj = serializer.Deserialize<T>(value);
+                var obj = serializer.Deserialize<T>(value);
 
-				return (T)obj; 
-			}
+                return (T)obj;
+            }
 
-			return default(T);
+            return default(T);
 		}
 
 		public IDictionary<string, T> GetAll<T>(IEnumerable<string> keys)

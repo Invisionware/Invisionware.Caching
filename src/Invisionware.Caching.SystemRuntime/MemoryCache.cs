@@ -429,9 +429,9 @@ namespace Invisionware.Caching.Net45
 		/// flush all as an asynchronous operation.
 		/// </summary>
 		/// <returns>Retrurns true on success</returns>
-		public async Task<bool> FlushAllAsync()
+		public Task<bool> FlushAllAsync()
 		{
-			return true;
+			return Task.FromResult(true);
 		}
 		#endregion Flush
 		#endregion Async

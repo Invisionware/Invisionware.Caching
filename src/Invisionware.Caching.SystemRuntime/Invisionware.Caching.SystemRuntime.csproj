@@ -4,7 +4,7 @@
 		<PackageId>Invisionware.Caching.SystemRunTime</PackageId>
 		<Authors>Invisionware</Authors>
 		<PackageProjectUrl>https://github.com/Invisionware/Invisionware.Caching</PackageProjectUrl>
-		<PackageLicenseUrl>https://raw.githubusercontent.com/Invisionware/Invisionware.Caching/master/LICENSE</PackageLicenseUrl>
+		<license>Apache-2.0</license>
 		<PackageIconUrl>https://github.com/Invisionware/Invisionware.Caching/raw/master/logo.png</PackageIconUrl>
 		<Description>This package implements the caching provider via the .NET framework (Memory Cache, etc).</Description>
 		<PackageReleaseNotes>Initial version</PackageReleaseNotes>

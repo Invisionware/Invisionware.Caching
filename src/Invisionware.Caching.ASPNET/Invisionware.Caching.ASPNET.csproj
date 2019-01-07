@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+
 	<PropertyGroup>
-		<TargetFramework>netstandard2.0</TargetFramework>
+		<TargetFrameworks>netcoreapp2.0;netstandard2.0;net472</TargetFrameworks>
 		<PackageId>Invisionware.Caching.ASPNET</PackageId>
 		<Authors>Invisionware</Authors>
 		<PackageProjectUrl>https://github.com/Invisionware/Invisionware.Caching</PackageProjectUrl>
@@ -12,11 +13,13 @@
 		<PackageTags>Invisionware caching</PackageTags>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 	</PropertyGroup>
+	
 	<ItemGroup>
-	  <PackageReference Include="Invisionware.IoC" Version="1.0.1" />
-	  <PackageReference Include="Invisionware.Serialization" Version="1.1.17" />
-	  <PackageReference Include="Microsoft.AspNetCore.Session" Version="2.1.1" />
+		<PackageReference Include="Invisionware.IoC" Version="1.0.1" />
+		<PackageReference Include="Invisionware.Serialization" Version="1.1.17" />
+		<PackageReference Include="Microsoft.AspNetCore.Session" Version="2.1.1" />
 	</ItemGroup>
+	
 	<ItemGroup>
 		<ProjectReference Include="..\Invisionware.Caching\Invisionware.Caching.csproj" />
 	</ItemGroup>

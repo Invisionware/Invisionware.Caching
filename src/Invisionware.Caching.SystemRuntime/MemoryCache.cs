@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 #endregion
 
-namespace Invisionware.Caching.Net45
+namespace Invisionware.Caching.Net
 {
 	/// <summary>
 	/// A .NET MemoryCache if the XLabs IAsyncCacheProvider and ICacheProvider .

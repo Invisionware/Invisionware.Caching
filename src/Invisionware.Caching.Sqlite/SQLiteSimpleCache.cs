@@ -103,9 +103,7 @@ namespace Invisionware.Caching.SQLite
 		/// <returns>Requested cache item.</returns>
 		public T Get<T>(string key)
 		{
-			object value;
-
-			if (!_cache.TryGetValue(key, out value))
+			if (!_cache.TryGetValue(key, out object value))
 				return default(T);
 
 			return (T)value;

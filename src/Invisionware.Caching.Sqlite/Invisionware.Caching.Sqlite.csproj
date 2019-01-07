@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+
 	<PropertyGroup>
-		<TargetFramework>netstandard2.0</TargetFramework>
+		<TargetFramework>net472</TargetFramework>
 		<PackageId>Invisionware.Caching.Sqlite</PackageId>
 		<Authors>Invisionware</Authors>
 		<PackageProjectUrl>https://github.com/Invisionware/Invisionware.Caching</PackageProjectUrl>
@@ -12,11 +13,13 @@
 		<PackageTags>Invisionware caching</PackageTags>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 	</PropertyGroup>
+	
 	<ItemGroup>
 		<PackageReference Include="Invisionware.Serialization" Version="1.1.16" />
-		<PackageReference Include="SQLiteNetExtensions.Async" Version="2.1.0" />
+		<PackageReference Include="SQLite.Net-PCL" Version="3.1.1" />
 		<PackageReference Include="System.ComponentModel.Annotations" Version="4.5.0" />
 	</ItemGroup>
+	
 	<ItemGroup>
 		<ProjectReference Include="..\Invisionware.Caching\Invisionware.Caching.csproj" />
 	</ItemGroup>

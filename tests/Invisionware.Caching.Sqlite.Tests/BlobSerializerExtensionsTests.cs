@@ -10,7 +10,7 @@ namespace Invisionware.Caching
 	[TestFixture]
 	public class BlobSerializerExtensionsTests
 	{
-		public class byteSerializer : IByteSerializer
+		public class ByteSerializerInternal : IByteSerializer
 		{
 			#region IByteSerializer implementation
 			public byte[] SerializeToBytes<T> (T obj)
@@ -28,19 +28,19 @@ namespace Invisionware.Caching
 			}
 			#endregion
 		}
-		public class dataClass
+		public class DataClassInternal
 		{
 			public string Name{ get; set; }
 		}
 		[Test]
 		public void BlobSerializerExtensionsAsBlobSerializerTest()
 		{
-			var blobDelegate = BlobSerializerExtensions.AsBlobSerializer (new byteSerializer());
+			var blobDelegate = BlobSerializerExtensions.AsBlobSerializer (new ByteSerializerInternal());
 
 			Assert.IsTrue (blobDelegate.CanDeserialize(typeof(string)));
 			byte[] myBytes = { 0xaa, 0xbb };
-			Assert.AreEqual ((new byteSerializer()).SerializeToBytes(myBytes), blobDelegate.Serialize<string>("nothing"));
-			Assert.AreEqual ((new byteSerializer()).Deserialize(myBytes,typeof(string)), blobDelegate.Deserialize(myBytes,typeof(string)));
+			Assert.AreEqual ((new ByteSerializerInternal()).SerializeToBytes(myBytes), blobDelegate.Serialize<string>("nothing"));
+			Assert.AreEqual ((new ByteSerializerInternal()).Deserialize(myBytes,typeof(string)), blobDelegate.Deserialize(myBytes,typeof(string)));
 		}
 	}
 }

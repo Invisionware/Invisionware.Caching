@@ -1,22 +1,23 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+	<PropertyGroup>
+		<TargetFramework>net472</TargetFramework>
 
-    <IsPackable>false</IsPackable>
-  </PropertyGroup>
+		<IsPackable>false</IsPackable>
+		<IsTestProject>true</IsTestProject>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Invisionware.Serialization" Version="1.1.18" />
-    <PackageReference Include="nunit" Version="3.12.0" />
-    <PackageReference Include="NUnit3TestAdapter" Version="3.16.0" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.3.0" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Invisionware.Serialization" Version="1.1.18" />
+		<PackageReference Include="nunit" Version="3.12.0" />
+		<PackageReference Include="NUnit3TestAdapter" Version="3.16.0" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.3.0" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\src\Invisionware.Caching\Invisionware.Caching.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\..\src\Invisionware.Caching\Invisionware.Caching.csproj" />
+	</ItemGroup>
 
-  <Import Project="..\Invisionware.Caching.Tests.Shared\Invisionware.Caching.Tests.Shared.projitems" Label="Shared" />
+	<Import Project="..\Invisionware.Caching.Tests.Shared\Invisionware.Caching.Tests.Shared.projitems" Label="Shared" />
 
 </Project>

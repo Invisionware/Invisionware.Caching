@@ -17,7 +17,7 @@
 	<ItemGroup>
 		<PackageReference Include="Invisionware.Serialization" Version="1.1.18" />
 		<PackageReference Include="SQLite.Net-PCL" Version="3.1.1" />
-		<PackageReference Include="System.ComponentModel.Annotations" Version="4.6.0" />
+		<PackageReference Include="System.ComponentModel.Annotations" Version="4.7.0" />
 	</ItemGroup>
 	
 	<ItemGroup>

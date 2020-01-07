@@ -46,8 +46,19 @@ namespace Invisionware.Caching.SQLite
 		/// <summary>
 		/// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
 		/// </summary>
+		/// <param name="fianlly"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
+		protected virtual void Dispose(bool fianlly)
+		{
+		}
+
+		/// <summary>
+		/// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+		/// </summary>
 		public void Dispose()
 		{
+			Dispose(true);
+
+			GC.SuppressFinalize(this);
 		}
 
 		#region ICacheProvider

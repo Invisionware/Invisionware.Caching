@@ -5,14 +5,22 @@
 		<PackageId>Invisionware.Caching.Sqlite</PackageId>
 		<Authors>Invisionware</Authors>
 		<PackageProjectUrl>https://github.com/Invisionware/Invisionware.Caching</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/Invisionware/Invisionware.Caching</RepositoryUrl>
+		<RepositoryType>github</RepositoryType>
+		<PackageIcon>logo.png</PackageIcon>
 		<license>Apache-2.0</license>
-		<PackageIconUrl>https://github.com/Invisionware/Invisionware.Caching/raw/master/logo.png</PackageIconUrl>
-		<Description>This package implements the caching provider via SQLite</Description>
-		<PackageReleaseNotes>Initial version</PackageReleaseNotes>
-		<Copyright>Copyright © 2018 Invisionware</Copyright>
-		<PackageTags>Invisionware caching</PackageTags>
+		<Copyright>Copyright © 2020 Invisionware</Copyright>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<Description>This package implements the caching provider via SQLite</Description>
+		<PackageTags>Invisionware caching</PackageTags>
 	</PropertyGroup>
+	
+	<ItemGroup>
+		<None Include="..\..\logo.png">
+			<Pack>True</Pack>
+			<PackagePath></PackagePath>
+		</None>
+	</ItemGroup>
 	
 	<ItemGroup>
 		<PackageReference Include="Invisionware.Serialization" Version="1.1.18" />

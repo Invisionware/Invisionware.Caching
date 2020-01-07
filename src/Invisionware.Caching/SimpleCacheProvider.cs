@@ -42,8 +42,19 @@ namespace Invisionware.Caching
 		/// <summary>
 		/// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
 		/// </summary>
-		public void Dispose()
+		/// <param name="fianlly"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
+		protected virtual void Dispose(bool fianlly)
 		{			
+		}
+
+		/// <summary>
+		/// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+		/// </summary>
+		public void Dispose()
+		{
+			Dispose(true);
+
+			GC.SuppressFinalize(this);
 		}
 
 		#region ICacheProvider
@@ -100,10 +111,10 @@ namespace Invisionware.Caching
 		public T Get<T>(string key)
 		{
 
-            if (!_cache.TryGetValue(key, out object value))
-                return default(T);
+			if (!_cache.TryGetValue(key, out object value))
+				return default(T);
 
-            return (T) value;
+			return (T) value;
 		}
 
 		/// <summary>

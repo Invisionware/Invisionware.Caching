@@ -36,7 +36,8 @@ namespace Invisionware.Caching.Net
 		/// <summary>
 		/// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
 		/// </summary>
-		public void Dispose()
+		/// <param name="fianlly"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
+		protected virtual void Dispose(bool fianlly)
 		{
 			if (_cache != null)
 			{
@@ -44,6 +45,16 @@ namespace Invisionware.Caching.Net
 
 				((System.Runtime.Caching.MemoryCache)_cache).Dispose();
 			}
+		}
+
+		/// <summary>
+		/// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+		/// </summary>
+		public void Dispose()
+		{
+			Dispose(true);
+
+			GC.SuppressFinalize(this);
 		}
 
 		#region Async

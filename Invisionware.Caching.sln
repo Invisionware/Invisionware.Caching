@@ -34,7 +34,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Invisionware.Caching.System
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		tests\Invisionware.Caching.Tests.Shared\Invisionware.Caching.Tests.Shared.projitems*{1d7817c1-52f5-4c04-aa21-c3cd659a7b70}*SharedItemsImports = 5
+		tests\Invisionware.Caching.Tests.Shared\Invisionware.Caching.Tests.Shared.projitems*{2c802ef2-83e9-4af8-bb14-ee2e8cd76a6f}*SharedItemsImports = 5
 		tests\Invisionware.Caching.Tests.Shared\Invisionware.Caching.Tests.Shared.projitems*{3ee7ae55-bb7b-48ed-a18d-84669bc51eb1}*SharedItemsImports = 13
+		tests\Invisionware.Caching.Tests.Shared\Invisionware.Caching.Tests.Shared.projitems*{4e3c625c-32b6-47d7-b49b-c7bb2b465fbc}*SharedItemsImports = 5
+		tests\Invisionware.Caching.Tests.Shared\Invisionware.Caching.Tests.Shared.projitems*{63f5786b-15fe-48af-90a1-cb7040b5224c}*SharedItemsImports = 5
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
